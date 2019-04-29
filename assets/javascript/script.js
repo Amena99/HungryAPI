@@ -55,7 +55,7 @@ getLocation()
 
 function gotLocation(currentLocation) {
 if (gotLocation) {
-  x.html("<p class='error-text'>Thanks, you must be hungry af</p>")
+  x.html("<p class='error-text'>Thanks, you must be hungry!</p>")
 }
   lat = currentLocation.coords.latitude;
   lon = currentLocation.coords.longitude;
