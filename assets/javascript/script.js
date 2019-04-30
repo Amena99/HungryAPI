@@ -1,3 +1,4 @@
+//Create global variables to store data 
 var cuisine = "";
 var address;
 var map;
@@ -9,9 +10,10 @@ var floatLon;
 var newCoords;
 var lon;
 var lat;
+var userLat = [];
+var userLon = [];
 console.log(newCoords)
 var logIn = false;
-
 
 // localStorage.clear();
 
@@ -24,6 +26,7 @@ var config = {
   storageBucket: "team-orange-project-1.appspot.com",
   messagingSenderId: "170221533069"
 };
+
 firebase.initializeApp(config);
 
 var database = firebase.database();
@@ -54,6 +57,16 @@ if (gotLocation) {
 }
   lat = currentLocation.coords.latitude; //get user lat and lon
   lon = currentLocation.coords.longitude;
+
+  userLon.push(lon)
+  userLat.push(lat);
+  console.log(userLat[0]);
+  console.log(typeof(userLat[0]))
+  console.log(userLon[0])
+
+
+  console.log(lat);
+
   stringLat = JSON.stringify(lat);
   stringLon = JSON.stringify(lon);
   floatLon = parseFloat(stringLon) 
@@ -89,7 +102,6 @@ const rapid = new RapidAPI("default-application_5bd7a6a6e4b0a5d5a03b6ba4",
 //API call will get restaurants of type cuisine in "search query" near "coordinates" pre-set below
 $("#cuisine-find-btn").on("click", function() {
   cuisine = $("#cuisine-input").val().trim();
-x.hide()
 
   rapid.call('Zomato', 'search', {
     'apiKey': `${apiKey}`,
@@ -135,7 +147,6 @@ x.hide()
       .css("align-self", "flex-start");
 
     $(".average-cost").css("align-self", "center")
-
 
     $("#cuisine-find-btn")
       .css("grid-row", "4/5")
@@ -217,20 +228,14 @@ x.hide()
   }).on('error', function(payload) {
    //log error
   });
-  // changes the submit button text
-  $("#cuisine-input").val("");
-  if ($("#cuisine-input").val() === "") {
-    $("#cuisine-find-btn").text("Get another option")
-  } else {
-    $("#cuisine-find-btn").text("Find This Cuisine Near Me!")
-  }
-});
-// function that changes the submit button text
-$("#cuisine-input").on("keydown", function() {
-  $("#cuisine-find-btn").text("Find This Cuisine Near Me!")
 });
 
+//function that changes the submit button text
+$("#cuisine-find-btn").on("click", function() {
+  $("#cuisine-find-btn").text("Find Another Option Near Me!")
+});
 
+//We attemped to create authorization with GitHub and Google 
 function loginWithGitHub() {
   console.log("Github login button clicked")
   var provider = new firebase.auth.GithubAuthProvider();
@@ -254,8 +259,6 @@ function loginWithGitHub() {
     var credential = error.credential;
     // ...
   });
-
-
 };
 
 function onSignIn(googleUser) {
@@ -284,7 +287,7 @@ function signout() {
     // An error happened.
   });
   console.log("sign out clicked")
-}
+};
 
 $("#loginWGithub").on("click", loginWithGitHub);
 $("#loginWGoogle").on("click", onSignIn);
