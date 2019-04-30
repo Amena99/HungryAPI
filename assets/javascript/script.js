@@ -28,20 +28,17 @@ firebase.initializeApp(config);
 
 var database = firebase.database();
 
-
-
-//Zomato API to find restaurant
-var apiKey = "7a92ebe9a7f0e1c5487a3ea08e3ef1e2";
-
-var rapid = new RapidAPI("default-application_5bd7a6a6e4b0a5d5a03b6ba4", "388648e2-e45b-4a7d-a751-a2e38784ef00");
-
 //variable to hold what kind of restaurant user is looking for
-
-
 // navigator.geolocation.getCurrentPosition(gotLocation, showError);
 
+
+//==========================================================
+//Google Maps Geolocation
+
+//variable to access error message div
 var x = $("#nav-error");
 
+//function to request user to allow location tracking
 function getLocation() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(gotLocation);
@@ -49,24 +46,23 @@ function getLocation() {
     x.html("Geolocation is not supported by this browser.")
   }
 }
-
-
 getLocation()
 
 function gotLocation(currentLocation) {
 if (gotLocation) {
   x.html("<p class='error-text'>Thanks, you must be hungry!</p>")
 }
-  lat = currentLocation.coords.latitude;
+  lat = currentLocation.coords.latitude; //get user lat and lon
   lon = currentLocation.coords.longitude;
   stringLat = JSON.stringify(lat);
   stringLon = JSON.stringify(lon);
-  floatLon = parseFloat(stringLon)
+  floatLon = parseFloat(stringLon) 
   floatLat = parseFloat(stringLat)
-  newCoords = stringLat + "," + stringLon;
-}
+  newCoords = stringLat + "," + stringLon; //lat and lon parsed as Strings
+}                                          //to use in finding restaurants
+                                           //in the Zomato API call
 
-
+//log errors if errors occur
 function showError(error) {
   switch (error.code) {
     case error.PERMISSION_DENIED:
@@ -84,7 +80,13 @@ function showError(error) {
   }
 }
 
-//API call will get restaurants of type var cuisine in "searc query" near "coordinates" pre-set below
+//=========================================================
+//Zomato API to find restaurant
+const apiKey = "7a92ebe9a7f0e1c5487a3ea08e3ef1e2";
+const rapid = new RapidAPI("default-application_5bd7a6a6e4b0a5d5a03b6ba4", 
+"388648e2-e45b-4a7d-a751-a2e38784ef00");
+
+//API call will get restaurants of type cuisine in "search query" near "coordinates" pre-set below
 $("#cuisine-find-btn").on("click", function() {
   cuisine = $("#cuisine-input").val().trim();
 x.hide()
@@ -107,15 +109,14 @@ x.hide()
   }).on('success', function(payload) {
     console.log(payload);
 
-    var random = Math.floor((Math.random() * 19) + 0);
-    var rLat = payload.result.restaurants[random].restaurant.location.latitude;
-    var rLon = payload.result.restaurants[random].restaurant.location.longitude;
-    var parseRLat = parseFloat(rLat);
-    var parseRLon = parseFloat(rLon)
-
-    // would like to take these values and create markers on the google map to show distance between user current location and the restaurant
+    let random = Math.floor((Math.random() * 19) + 0);
+    let rLat = payload.result.restaurants[random].restaurant.location.latitude;
+    let rLon = payload.result.restaurants[random].restaurant.location.longitude;
+    let parseRLat = parseFloat(rLat);
+    let parseRLon = parseFloat(rLon)
     console.log(`restaurants latitude: ${payload.result.restaurants[random].restaurant.location.latitude}`)
     console.log(`restaurants longitude: ${payload.result.restaurants[random].restaurant.location.longitude}`)
+    
     $(".restaurant-name").html(payload.result.restaurants[random].restaurant.name);
     address = payload.result.restaurants[random].restaurant.location.address;
     var shortenSuffix = address
@@ -214,7 +215,7 @@ x.hide()
 
     $(".cost42").html(`<p class="average-cost">Average cost for two: $${payload.result.restaurants[random].restaurant.average_cost_for_two}</p>`)
   }).on('error', function(payload) {
-    /*YOUR CODE GOES HERE*/
+   //log error
   });
   // changes the submit button text
   $("#cuisine-input").val("");
@@ -300,9 +301,7 @@ firebase.auth().onAuthStateChanged(function(user) {
   }
 });
 
-
-
-
+//CSS class to add fade functionality
 $(function() {
   $('body').removeClass('fade-out');
 });
