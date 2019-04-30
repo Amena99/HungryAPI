@@ -10,8 +10,14 @@
 ![alt text](https://i.imgur.com/8pdf7BKl.png, "search result") 
 
 ### My Contributions to Hungry?'s App Features
-#### Incorporated Google Maps geolocation to .
-#### Incorporated the Zomato API to find restaurants. 
+#### Incorporated Google Maps geolocation to find user location.
+Used Google maps API to add geolocation to the site. When the user first lands on the page, they are prompted to allow the browser to find their location. Upon accept, the user's current latitude and longitude is tracked and parsed to use as a metric when searching for restaurants near them. 
 
+![alt text](https://i.imgur.com/p6MMpMIl.png, "Google Geolocation Code")
+
+#### Incorporated the Zomato API to find restaurants. 
+The Zomato API provides data for restaurants across the globe with many searchable metrics including cuisine type. I used the Rapid API SDK to test and incorporate the Zomato API to use with this app. 
+
+![alt text](https://i.imgur.com/86yaWs6l.png, "ZomatoAPI Code")
  
 
